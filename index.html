@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    const root = document.getElementById("root");
+
+    /**
+     * React.createElement(
+     *  tag,
+     *  props,
+     *  children
+     * )
+     */
+
+    // const h3 = React.createElement(
+    //   "h3",
+    //   {
+    //     onMouseEnter: () => console.log("mouse enter"), // event listener 추가
+    //   },
+    //   "Total clicks: 0"
+    // );
+
+    // const btn = React.createElement(
+    //   "button",
+    //   {
+    //     onClick: () => console.log("I'm clicked!"),
+    //     style: { backgroundColor: "tomato" },
+    //   },
+    //   "Click me"
+    // );
+
+    // const container = React.createElement("div", null, [h3, btn]);
+
+    function Title() {
+      return (
+        <h3 id="title" onMouseEnter={() => console.log("mouse enter")}>
+          Total clicks: 0
+        </h3>
+      );
+    }
+
+    const Button = () => (
+      <button onClick={() => console.log("I'm clicked!")}>Click me</button>
+    );
+
+    const Container = (
+      <div>
+        <Title />
+        <Button />
+      </div>
+    );
+
+    ReactDOM.render(Container, root);
+  </script>
+</html>
