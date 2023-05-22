@@ -1,39 +1,24 @@
 import { useState, useEffect } from "react";
 
-function App() {
-  const [counter, setCounter] = useState(0);
-  const [keyword, setKeyword] = useState("");
-  const onClick = () => setCounter((prev) => prev + 1);
-  const onChange = (event) => setKeyword(event.target.value);
-
-  // state가 변경되면, 모든 컴포넌트가 다시 렌더링된다.
-  // 반복하게 되면, 성능이 저하된다.
-  console.log("I run all the time.");
-
-  // useEffect를 사용하면, state가 변경되어도, 해당 함수는 한번만 실행된다.
+function Hello() {
   useEffect(() => {
-    console.log("I run only once.");
+    console.log("I'm mounted :)");
+
+    // useEffect의 return 값은 cleanup 함수이다.
+    return () => console.log("I'm unmounted :(");
   }, []);
-  useEffect(() => {
-    console.log("I run when 'keyword' changes.");
-  }, [keyword]);
-  useEffect(() => {
-    console.log("I run when 'counter' changes.");
-  }, [counter]);
-  useEffect(() => {
-    console.log("I run when 'keyword' || 'counter' changes.");
-  }, [keyword, counter]);
+  return <h1>Hello</h1>;
+}
+
+function App() {
+  const [showing, setShowing] = useState(false);
+  const onClick = () => setShowing((prev) => !prev);
 
   return (
+    // Hello 컴포넌트가 null이면, React는 Hello 컴포넌트를 unmount한다.
     <div>
-      <input
-        value={keyword}
-        onChange={onChange}
-        type="text"
-        placeholder="Search here..."
-      />
-      <h1>{counter}</h1>
-      <button onClick={onClick}>Click me</button>
+      {showing ? <Hello /> : null}
+      <button onClick={onClick}>{showing ? "Hide" : "Show"}</button>
     </div>
   );
 }
