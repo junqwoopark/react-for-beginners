@@ -5,108 +5,46 @@
   </body>
   <script src="https://unpkg.com/react@17.0.2/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/prop-types@15.7.2/prop-types.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
   <script type="text/babel">
-    function MinutesToHours() {
-      const [amount, setAmount] = React.useState(0);
-      const [inverted, setInvertped] = React.useState(false);
-      const onChange = (event) => setAmount(event.target.value);
-      const reset = () => setAmount(0);
-      const onInvert = () => {
-        reset();
-        setInvertped((current) => !current);
-      };
+    function Btn({ text, fontSize = 14, onClick = null } /* == props */) {
       return (
-        <div>
-          <h3> MinutesToHours </h3>
-          <div>
-            <label htmlFor="minutes">Minutes</label>
-            <input
-              value={inverted ? Math.round(amount * 60) : amount}
-              id="minutes"
-              placeholder="Minutes"
-              type="number"
-              onChange={onChange}
-              disabled={inverted}
-            />
-          </div>
-          <div>
-            <label htmlFor="hours">Hours</label>
-            <input
-              value={inverted ? amount : Math.round(amount / 60)}
-              id="hours"
-              placeholder="Hours"
-              type="number"
-              onChange={onChange}
-              disabled={!inverted}
-            />
-          </div>
-          <button onClick={reset}>Reset</button>
-          <button onClick={onInvert}>Invert</button>
-        </div>
+        <button
+          onClick={onClick}
+          style={{
+            backgroundColor: "tomato",
+            color: "white",
+            padding: "10px 20px",
+            border: "0",
+            borderRadius: "5px",
+            fontSize,
+          }}
+        >
+          {text}
+        </button>
       );
     }
 
-    function KmToMeters() {
-      const [amount, setAmount] = React.useState(0);
-      const [inverted, setInverted] = React.useState(false);
+    // PropTypes를 사용하면, 컴포넌트의 props type을 검증할 수 있다.
+    Btn.propTypes = {
+      text: PropTypes.string.isRequired,
+      fontSize: PropTypes.number,
+    };
 
-      const onChange = (event) => setAmount(event.target.value);
-      const onReset = () => setAmount(0);
-      const onInvert = () => {
-        onReset();
-        setInverted((current) => !current);
-      };
-
-      return (
-        <div>
-          <h3> KmToMeters </h3>
-          <div>
-            <label htmlFor="km">Km</label>
-            <input
-              value={inverted ? amount / 1000 : amount}
-              id="km"
-              placeholder="Km"
-              type="number"
-              disabled={inverted}
-              onChange={onChange}
-            />
-          </div>
-          <div>
-            <label htmlFor="meters">Meters</label>
-            <input
-              value={inverted ? amount : amount * 1000}
-              id="meters"
-              placeholder="Meters"
-              type="number"
-              disabled={!inverted}
-              onChange={onChange}
-            />
-          </div>
-          <button onClick={onReset}>Reset</button>
-          <button onClick={onInvert}>Invert</button>
-        </div>
-      );
-    }
+    // 부모 상태가 바뀌면, 모든 자식 컴포넌트가 리렌더링된다.
+    // 그러나, 자식 컴포넌트가 리렌더링되지 않아도 되는 경우가 있다.
+    // 이런 경우, React.memo를 사용한다.
+    const MemorizedBtn = React.memo(Btn);
 
     function App() {
-      const [index, setIndex] = React.useState("x");
-      const onSelect = (event) => {
-        setIndex(event.target.value);
-      };
-      console.log("render with index", index);
+      const [value, setValue] = React.useState("Save Changes");
+      const onClick = () => setValue("Revert Changes");
       return (
         <div>
-          <h1> Super Converter </h1>
-          <select onChange={onSelect}>
-            <option value="x">Select your option</option>
-            <option value="0">Minutes & Hours</option>
-            <option value="1">Km & Meters</option>
-          </select>
-          <hr />
-          {index === "x" ? "Please select your units" : null}
-          {index === "0" ? <MinutesToHours /> : null}
-          {index === "1" ? <KmToMeters /> : null}
+          <MemorizedBtn text={value} fontSize={18} onClick={onClick} />
+          <MemorizedBtn text={"Continue"} />
         </div>
       );
     }
